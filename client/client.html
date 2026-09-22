@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Our simple HTTP server</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  
+
   <script>
+    //for handling fetch response
+    const handleResponse = async (response) => {
+
+      const content = document.querySelector("#content");
+
+      //heading changes based on status code
+      switch (response.status) {
+        case 200:
+          content.innerHTML = `<b>Success!</b>`;
+          break;
+        case 201:
+          content.innerHTML = `<b>Created!</b>`;
+          break;
+        case 204:
+          content.innerHTML = `<b>Updated!`;
+          break;
+        case 400: content.innerHTML = `<b>Bad Request :(</b>`;
+          break;
+        case 404: content.innerHTML = `<b>Content Not Found </3</b>`;
+          break;
+      }
+
+    }
+
+    const sendPost = async (nameForm) => {
+      //form info
+      const url = nameForm.getAttribute('action');
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': formData.length,
+          'Accept': 'application/json',
+        },
+        body: formData,
+      });
+    }
+
+
+    const init = () => {
+
+      const nameForm = document.querySelector("#nameForm");
+      const userForm = document.querySelector("#userForm");
+
+      //prevent default form action
+      const addUser = (e) => {
+        e.preventDefaut();
+        sendPost(nameForm);
+        return false;
+      }
+
+      //this is get not post, change?
+      const getUser = (e) => {
+        e.preventDefaut();
+        // sendPost(userForm);
+        return false;
+      }
+
+      nameForm.addEventListener('submit', addUser);
+      userForm.addEventListener('submit', getUser);
+    }
+
+    window.onload = init;
 
   </script>
 </head>
+
 <body>
   <section id="top">
     <h3>POST Status Code Tests</h3>
@@ -15,7 +81,7 @@
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
       <label for="age">Age: </label>
-      <input id="ageField" type="number" name="age" min="0" max="100" step="1"/>
+      <input id="ageField" type="number" name="age" min="0" max="100" step="1" />
       <input type="submit" value="Add User" />
     </form>
     <form id="userForm" action="/getUsers" method="get">
@@ -33,4 +99,5 @@
   <section id="content">
   </section>
 </body>
+
 </html>

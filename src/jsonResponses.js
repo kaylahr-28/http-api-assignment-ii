@@ -15,14 +15,23 @@ const respondJSON = (request, response, status, obj) => {
     }
 
     response.end();
+    console.log(content);
 };
 
 const getUsers = (request, response) => {
     const responseJSON = {
         users,
     };
-    //may need to update for head?
+    //check
     respondJSON(request, response, 200, responseJSON);
+}
+
+const notFound = (request, response) => {
+    const responseJSON = {
+        message: 'The page you are looking for was not found.',
+        id: 'notFound',
+    };
+    respondJSON(request, response, 404, responseJSON);
 }
 
 const addUsers = (request, response) => {
@@ -63,5 +72,6 @@ const addUsers = (request, response) => {
 
 module.exports = {
     getUsers,
-    addUsers
+    addUsers,
+    notFound
 }

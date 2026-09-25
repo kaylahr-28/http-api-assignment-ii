@@ -1,6 +1,6 @@
 const http = require('http');
 const query = require('querystring');
-const port = process.env.PORT || process.env.NODE_PORT || 5000;
+const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const htmlHandler = require('./htmlResponses');
 const jsonHandler = require('./jsonResponses');
@@ -25,9 +25,16 @@ const parseBody = (request, response, handler) => {
     //when we have all the info
     request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
-console.log(request.body);
+        const type = request.headers['content-type'];
+        console.log(request.body);
         //turn into obj
-        request.body = JSON.parse(bodyString);
+        if (type === 'application/json') {
+            request.body = JSON.parse(bodyString);
+        } else {
+            response.writeHead(400, { 'Content-Type': 'application/json' });
+            response.write(JSON.stringify({ error: 'invalid data format' }));
+            return response.end();
+        }
 
         handler(request, response);
     });
@@ -50,12 +57,10 @@ const handleGet = (request, response, parsedUrl) => {
             jsonHandler.getUsers(request, response);
             break;
         case '/notReal':
-            htmlHandler.getIndex(request, response);
-            response.status === 404;
+            jsonHandler.notFound(request, response);
             break;
         default:
-            htmlHandler.getIndex(request, response);
-            response.status === 404;
+            jsonHandler.notFound(request, response);
             break;
     }
 }

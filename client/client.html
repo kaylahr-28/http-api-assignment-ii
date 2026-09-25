@@ -29,8 +29,8 @@
       }
 
 
-      if (getRequest) {  
-            let obj = await response.json();
+      if (getRequest) {
+        let obj = await response.json();
 
         content.innerHTML += `<p>${JSON.stringify(obj)}</p>`;
       }
@@ -41,7 +41,7 @@
       const nameForm = document.querySelector("#nameForm");
       const userForm = document.querySelector("#userForm");
       const methodSelect = document.querySelector("#methodSelect");
-
+      const urlField = document.querySelector("#urlField");
       //form info
       //methodSelect
       let url;
@@ -62,7 +62,7 @@
         formData = JSON.stringify({ name, age });
 
       } else if (form === userForm) {
-        url = userForm.getAttribute('action');
+        url = urlField.value;
         method = methodSelect.value;
 
       }

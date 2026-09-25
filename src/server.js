@@ -1,5 +1,6 @@
 const http = require('http');
-const port = process.env.PORT || process.env.NODE_PORT || 3000;
+const query = require('querystring');
+const port = process.env.PORT || process.env.NODE_PORT || 5000;
 
 const htmlHandler = require('./htmlResponses');
 const jsonHandler = require('./jsonResponses');
@@ -24,7 +25,7 @@ const parseBody = (request, response, handler) => {
     //when we have all the info
     request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
-
+console.log(request.body);
         //turn into obj
         request.body = JSON.parse(bodyString);
 
@@ -46,8 +47,6 @@ const handleGet = (request, response, parsedUrl) => {
             htmlHandler.getIndex(request, response);
             break;
         case '/getUsers':
-            //if method is get, 
-            //if method is head,
             jsonHandler.getUsers(request, response);
             break;
         case '/notReal':

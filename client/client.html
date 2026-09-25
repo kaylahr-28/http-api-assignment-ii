@@ -28,39 +28,49 @@
           break;
       }
 
-      let obj = await response.json();
 
-      if (getRequest) {
+      if (getRequest) {  
+            let obj = await response.json();
+
         content.innerHTML += `<p>${JSON.stringify(obj)}</p>`;
       }
 
     };
 
     const handleForm = async (form) => {
+      const nameForm = document.querySelector("#nameForm");
+      const userForm = document.querySelector("#userForm");
+      const methodSelect = document.querySelector("#methodSelect");
+
       //form info
       //methodSelect
-      const url = form.getAttribute('action');
-      const method = form.getAttribute('method');
-      const formData = "";
+      let url;
+      let method;
+      let formData = "";
 
       //for post
       let name;
       let age;
 
       //post
-      if (form === document.querySelector("#nameForm")) {
+      if (form === nameForm) {
+        url = nameForm.getAttribute('action');
+        method = nameForm.getAttribute('method');
+
         name = document.querySelector("#nameField").value;
         age = document.querySelector("#ageField").value;
         formData = JSON.stringify({ name, age });
 
-      } else if (form === document.querySelector("#userForm")) {
+      } else if (form === userForm) {
+        url = userForm.getAttribute('action');
+        method = methodSelect.value;
 
       }
 
 
 
       let response = await fetch(url, {
-        method,
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': formData.length,
@@ -84,14 +94,14 @@
 
       //prevent default form action
       const addUser = (e) => {
-        e.preventDefaut();
+        e.preventDefault();
         handleForm(nameForm);
         return false;
       }
 
       //this is get not post, change?
       const getUser = (e) => {
-        e.preventDefaut();
+        e.preventDefault();
         handleForm(userForm);
         return false;
       }

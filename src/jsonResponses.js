@@ -11,7 +11,7 @@ const respondJSON = (request, response, status, obj) => {
 
     //body only for 'get'
     if (request.method !== "HEAD" && status !== 204) {
-        response.write(content);
+        response.write(JSON.stringify(obj));
     }
 
     response.end();

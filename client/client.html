@@ -20,7 +20,7 @@
           content.innerHTML = `<b>Created!</b>`;
           break;
         case 204:
-          content.innerHTML = `<b>Updated!`;
+          content.innerHTML = `<b>Updated! (No Content)`;
           break;
         case 400: content.innerHTML = `<b>Bad Request :(</b>`;
           break;
@@ -28,11 +28,26 @@
           break;
       }
 
-    }
+      const obj = await response.json();
 
-    const sendPost = async (nameForm) => {
+      if (obj.message) {
+        content.innerHTML += `<p>${obj.message}</p>`;
+      }
+
+    };
+
+    const handleForm = async (form) => {
       //form info
-      const url = nameForm.getAttribute('action');
+      //methodSelect
+      const url = form.getAttribute('action');
+      const method = form.getAttribute('method');
+
+      if (form === document.querySelector("#nameForm")) {
+
+      } else if (form === document.querySelector("#userForm")) {
+
+      }
+
 
       const response = await fetch(url, {
         method: method,
@@ -54,14 +69,14 @@
       //prevent default form action
       const addUser = (e) => {
         e.preventDefaut();
-        sendPost(nameForm);
+        handleForm(nameForm);
         return false;
       }
 
       //this is get not post, change?
       const getUser = (e) => {
         e.preventDefaut();
-        // sendPost(userForm);
+        handleForm(userForm);
         return false;
       }
 

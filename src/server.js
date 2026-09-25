@@ -2,9 +2,37 @@ const http = require('http');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const htmlHandler = require('./htmlResponses');
-//const jsonHandler = require('./jsonResponses');
+const jsonHandler = require('./jsonResponses');
 
+// for POST request
+const parseBody = (request, response, handler) => {
+    //pieces of request will go here
+    const body = [];
 
+    //error
+    request.on('error', (err) => {
+        console.dir(err);
+        response.statusCode = 400;
+        response.end();
+    });
+
+    //add data to array
+    request.on('data', (chunk) => {
+        body.push(chunk);
+    });
+
+    //when we have all the info
+    request.on('end', () => {
+        const bodyString = Buffer.concat(body).toString();
+
+        //turn into obj
+        request.body = JSON.parse(bodyString);
+
+        handler(request, response);
+    });
+};
+
+//for the get user form
 const handleGet = (request, response, parsedUrl) => {
 
     switch (parsedUrl.pathname) {
@@ -17,6 +45,13 @@ const handleGet = (request, response, parsedUrl) => {
         case '/':
             htmlHandler.getIndex(request, response);
             break;
+        case '/getUsers':
+            jsonHandler.getUsers(request, response);
+            break;
+        case '/notReal':
+            htmlHandler.getIndex(request, response);
+            response.status === 404;
+            break;
         default:
             htmlHandler.getIndex(request, response);
             response.status === 404;
@@ -24,13 +59,24 @@ const handleGet = (request, response, parsedUrl) => {
     }
 }
 
+//for the add user form
+const handlePost = (request, response, parsedUrl) => {
+    if (parsedUrl.pathname === '/addUser') {
+        parseBody(request, response, jsonHandler)
+
+        parseBody(request, response, jsonHandler.addUser);
+    }
+};
+
 const onRequest = (request, response) => {
     const protocol = request.connection.ecrypted ? 'https' : 'http';
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
 
+    //first form
     if (request.method === "POST") {
-        handleGet(request, response, parsedUrl);
+        handlePost(request, response, parsedUrl);
 
+        //second form (get/head)
     } else {
         handleGet(request, response, parsedUrl);
     }

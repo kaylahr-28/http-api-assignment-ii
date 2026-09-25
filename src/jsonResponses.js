@@ -3,6 +3,7 @@ const users = {};
 
 const respondJSON = (request, response, status, obj) => {
     const content = JSON.stringify(obj);
+
     response.writeHead(status, {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(content, 'utf8'),

@@ -7,7 +7,7 @@
 
   <script>
     //for handling fetch response
-    const handleResponse = async (response) => {
+    const handleResponse = async (response, getRequest) => {
 
       const content = document.querySelector("#content");
 
@@ -28,10 +28,10 @@
           break;
       }
 
-      const obj = await response.json();
+      let obj = await response.json();
 
-      if (obj.message) {
-        content.innerHTML += `<p>${obj.message}</p>`;
+      if (getRequest) {
+        content.innerHTML += `<p>${JSON.stringify(obj)}</p>`;
       }
 
     };
@@ -41,23 +41,39 @@
       //methodSelect
       const url = form.getAttribute('action');
       const method = form.getAttribute('method');
+      const formData = "";
 
+      //for post
+      let name;
+      let age;
+
+      //post
       if (form === document.querySelector("#nameForm")) {
+        name = document.querySelector("#nameField").value;
+        age = document.querySelector("#ageField").value;
+        formData = JSON.stringify({ name, age });
 
       } else if (form === document.querySelector("#userForm")) {
 
       }
 
 
-      const response = await fetch(url, {
-        method: method,
+
+      let response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           'Content-Length': formData.length,
           'Accept': 'application/json',
         },
-        body: formData,
+
       });
+
+      // if (method !== "get") {
+      //   response.body = formData;
+      // }
+
+      handleResponse(response, method == "get");
     }
 
 

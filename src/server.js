@@ -46,6 +46,8 @@ const handleGet = (request, response, parsedUrl) => {
             htmlHandler.getIndex(request, response);
             break;
         case '/getUsers':
+            //if method is get, 
+            //if method is head,
             jsonHandler.getUsers(request, response);
             break;
         case '/notReal':
@@ -62,9 +64,8 @@ const handleGet = (request, response, parsedUrl) => {
 //for the add user form
 const handlePost = (request, response, parsedUrl) => {
     if (parsedUrl.pathname === '/addUser') {
-        parseBody(request, response, jsonHandler)
 
-        parseBody(request, response, jsonHandler.addUser);
+        parseBody(request, response, jsonHandler.addUsers);
     }
 };
 

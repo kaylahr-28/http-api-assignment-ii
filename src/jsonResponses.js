@@ -15,7 +15,7 @@ const respondJSON = (request, response, status, obj) => {
     }
 
     response.end();
-    console.log(content);
+    console.log("respondjson content", content);
 };
 
 const getUsers = (request, response) => {
@@ -34,7 +34,7 @@ const notFound = (request, response) => {
     respondJSON(request, response, 404, responseJSON);
 }
 
-const addUsers = (request, response) => {
+const addUser = (request, response) => {
 
     const responseJSON = {
         message: 'Please provide both a name and an age.',
@@ -72,6 +72,6 @@ const addUsers = (request, response) => {
 
 module.exports = {
     getUsers,
-    addUsers,
+    addUser,
     notFound
 }

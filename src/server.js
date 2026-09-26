@@ -26,7 +26,7 @@ const parseBody = (request, response, handler) => {
     request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
         const type = request.headers['content-type'];
-        console.log(request.body);
+        console.log("request.body", body);
         //turn into obj
         if (type === 'application/json') {
             request.body = JSON.parse(bodyString);
@@ -56,6 +56,9 @@ const handleGet = (request, response, parsedUrl) => {
         case '/getUsers':
             jsonHandler.getUsers(request, response);
             break;
+        case '/addUser':
+            jsonHandler.addUser(request, response);
+            break;
         case '/notReal':
             jsonHandler.notFound(request, response);
             break;
@@ -69,7 +72,7 @@ const handleGet = (request, response, parsedUrl) => {
 const handlePost = (request, response, parsedUrl) => {
     if (parsedUrl.pathname === '/addUser') {
 
-        parseBody(request, response, jsonHandler.addUsers);
+        parseBody(request, response, jsonHandler.addUser);
     }
 };
 

@@ -21,8 +21,9 @@
           break;
         case 204:
           content.innerHTML = `<b>Updated! (No Content)`;
-          break;
-        case 400: content.innerHTML = `<b>Bad Request :(</b>`;
+          return;
+        case 400:
+          content.innerHTML = `<b>Bad Request :(</b>`;
           break;
         case 404: content.innerHTML = `<b>Content Not Found </3</b>`;
           break;
@@ -52,6 +53,8 @@
       let name;
       let age;
 
+      let response;
+
       //post
       if (form === nameForm) {
         url = nameForm.getAttribute('action');
@@ -61,24 +64,32 @@
         age = document.querySelector("#ageField").value;
         formData = JSON.stringify({ name, age });
 
+
+        response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': formData.length,
+            'Accept': 'application/json',
+          },
+          body: formData,
+
+        });
+
       } else if (form === userForm) {
         url = urlField.value;
         method = methodSelect.value;
 
+        response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': formData.length,
+            'Accept': 'application/json',
+          },
+
+        });
       }
-
-
-
-      let response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': formData.length,
-          'Accept': 'application/json',
-        },
-
-      });
-
       // if (method !== "get") {
       //   response.body = formData;
       // }

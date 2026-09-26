@@ -15,7 +15,7 @@ const respondJSON = (request, response, status, obj) => {
     }
 
     response.end();
-    console.log("respondjson content", content);
+    //console.log("respondjson content", content);
 };
 
 const getUsers = (request, response) => {
@@ -44,7 +44,7 @@ const addUser = (request, response) => {
 
     //both needed
     if (!name || !age) {
-        responseJSON.id = 'missingParams';
+        responseJSON.id = 'addUserMissingParams';
         return respondJSON(request, response, 400, responseJSON);
     };
 

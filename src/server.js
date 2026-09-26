@@ -26,7 +26,6 @@ const parseBody = (request, response, handler) => {
     request.on('end', () => {
         const bodyString = Buffer.concat(body).toString();
         const type = request.headers['content-type'];
-        console.log("request.body", body);
         //turn into obj
         if (type === 'application/json') {
             request.body = JSON.parse(bodyString);

@@ -7,7 +7,7 @@
 
   <script>
     //for handling fetch response
-    const handleResponse = async (response, getRequest) => {
+    const handleResponse = async (response, headRequest) => {
 
       const content = document.querySelector("#content");
 
@@ -30,12 +30,14 @@
       }
 
 
-      if (getRequest) {
+      //print content if the request is not 'head'
+      if (!headRequest && response.status !== 404) {
         let obj = await response.json();
+        let htmlContent = JSON.stringify(obj).replaceAll(`"`, " ");
 
-        content.innerHTML += `<p>${JSON.stringify(obj)}</p>`;
+        content.innerHTML += `<p>${response.status == 400 ? JSON.stringify(obj.message).replaceAll(`"`, " ") : htmlContent}</p>`;
+        console.log(obj);
       }
-
     };
 
     const handleForm = async (form) => {
@@ -76,8 +78,11 @@
 
         });
 
+        //get/head
       } else if (form === userForm) {
+        // /getUsers or /notReal
         url = urlField.value;
+        //get or head
         method = methodSelect.value;
 
         response = await fetch(url, {
@@ -90,11 +95,7 @@
 
         });
       }
-      // if (method !== "get") {
-      //   response.body = formData;
-      // }
-
-      handleResponse(response, method == "get");
+      handleResponse(response, method == "head");
     }
 
 
@@ -103,14 +104,14 @@
       const nameForm = document.querySelector("#nameForm");
       const userForm = document.querySelector("#userForm");
 
-      //prevent default form action
+      //for nameForm (post)
       const addUser = (e) => {
         e.preventDefault();
         handleForm(nameForm);
         return false;
       }
 
-      //this is get not post, change?
+      //for userForm (get/head)
       const getUser = (e) => {
         e.preventDefault();
         handleForm(userForm);

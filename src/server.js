@@ -1,5 +1,4 @@
 const http = require('http');
-const query = require('querystring');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const htmlHandler = require('./htmlResponses');
@@ -67,10 +66,9 @@ const handleGet = (request, response, parsedUrl) => {
     }
 }
 
-//for the add user form
+//calls parseBody for the add user form
 const handlePost = (request, response, parsedUrl) => {
     if (parsedUrl.pathname === '/addUser') {
-
         parseBody(request, response, jsonHandler.addUser);
     }
 };

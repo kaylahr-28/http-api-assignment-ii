@@ -1,6 +1,10 @@
 const users = {};
 
 
+/**
+ * responsdJSON: handles writeHead methods for response based on
+ * status code and JSON object passed in
+ */
 const respondJSON = (request, response, status, obj) => {
     const content = JSON.stringify(obj);
 
@@ -18,6 +22,7 @@ const respondJSON = (request, response, status, obj) => {
     //console.log("respondjson content", content);
 };
 
+// send object of users
 const getUsers = (request, response) => {
     const responseJSON = {
         users,
@@ -26,6 +31,7 @@ const getUsers = (request, response) => {
     respondJSON(request, response, 200, responseJSON);
 }
 
+// for /notReal and other pathnames not specified
 const notFound = (request, response) => {
     const responseJSON = {
         message: 'The page you are looking for was not found.',
@@ -34,6 +40,8 @@ const notFound = (request, response) => {
     respondJSON(request, response, 404, responseJSON);
 }
 
+// when a user is added; either 400 (not all fields filled),
+// 201 (user created), or 204 (user updated)
 const addUser = (request, response) => {
 
     const responseJSON = {
@@ -51,7 +59,7 @@ const addUser = (request, response) => {
     //204: updated
     let responseCode = 204;
 
-    //new user
+    //201: new user
     if (!users[name]) {
         responseCode = 201;
         users[name] = {

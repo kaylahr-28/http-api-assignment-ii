@@ -6,7 +6,10 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
 
   <script>
-    //for handling fetch response
+    /**
+     * handleResponse: for handling fetch response- different headers
+     * based on status code. formats json string accordingly
+     **/
     const handleResponse = async (response, headRequest) => {
 
       const content = document.querySelector("#content");
@@ -31,15 +34,18 @@
 
 
       //print content if the request is not 'head'
-      if (!headRequest && response.status !== 404) {
+      if (!headRequest) {
         let obj = await response.json();
-        let htmlContent = JSON.stringify(obj).replaceAll(`"`, " ");
-
-        content.innerHTML += `<p>${response.status == 400 ? JSON.stringify(obj.message).replaceAll(`"`, " ") : htmlContent}</p>`;
+        let htmlContent = JSON.stringify(obj)
+        //dont include .id in 400/404 messages
+        content.innerHTML += `<p>${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message).replaceAll(`"`, " ") : htmlContent}</p>`;
         console.log(obj);
       }
     };
 
+    /**
+     * handleForm: sends fetch request based on form values
+     **/
     const handleForm = async (form) => {
       const nameForm = document.querySelector("#nameForm");
       const userForm = document.querySelector("#userForm");
@@ -82,6 +88,7 @@
       } else if (form === userForm) {
         // /getUsers or /notReal
         url = urlField.value;
+
         //get or head
         method = methodSelect.value;
 

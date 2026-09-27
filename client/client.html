@@ -37,6 +37,7 @@
       if (!headRequest) {
         let obj = await response.json();
         let htmlContent = JSON.stringify(obj)
+        htmlContent = htmlContent.replaceAll(":", ": ").replaceAll(",", ", ");
         //dont include .id in 400/404 messages
         content.innerHTML += `<p>${response.status == 400 || response.status == 404 ? JSON.stringify(obj.message).replaceAll(`"`, " ") : htmlContent}</p>`;
         console.log(obj);
